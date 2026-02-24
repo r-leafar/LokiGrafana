@@ -1,0 +1,44 @@
+services:           
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: app
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - Logging__LogLevel__Default=Trace
+            - ASPNETCORE_HTTP_PORTS=8080
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://grafana-loki:3100/otlp/v1/logs
+        ports:
+            - "8080:8080"
+        networks:
+            - app-network
+        depends_on:
+            - grafana-loki  
+    grafana-loki:
+        container_name: grafana-loki
+        image: grafana/loki:3.5.10
+        ports:
+          - "3100:3100" # HTTP (Grafana)
+          - "4318:4318"
+        volumes:
+          - ./loki-config.yml:/etc/loki/local-config.yaml
+        command: -config.file=/etc/loki/local-config.yaml
+        networks:
+            - app-network
+          
+    grafana-dashboard:
+        image: grafana/grafana
+        container_name: grafana-dashboard
+        # Monta o arquivo de provisioning para o Grafana ler no startup
+        volumes:
+          - ./grafana/provisioning/datasources/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+        ports:
+          - "3000:3000"
+        environment:
+          - GF_SECURITY_ADMIN_PASSWORD=admin
+        networks:
+            - app-network
+networks:
+    app-network:
+        driver: bridge

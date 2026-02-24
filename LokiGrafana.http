@@ -1,0 +1,56 @@
+@hostname = localhost
+@port = 8080
+
+### Enviar log de TRACE (Level 0)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "Level": 0,
+  "Msg": "Testando log de nível TRACE via POST"
+}
+
+### Enviar log de DEBUG (Level 1)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "level": 1,
+  "msg": "Testando log de nível DEBUG via POST"
+}
+
+### Enviar log de INFORMATION (Level 2)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "level": 2,
+  "msg": "Testando log de nível INFORMATION no Loki"
+}
+
+### Enviar log de Warning (Level 3)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "level": 3,
+  "msg": "Testando log de nível WARNING no Loki"
+}
+
+### Enviar log de ERROR (Level 4)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "level": 4,
+  "msg": "Simulando um ERROR para o Grafana"
+}
+
+### Enviar log de CRITICAL (Level 5)
+POST http://{{hostname}}:{{port}}/loki-log
+Content-Type: application/json
+
+{
+  "level": 5,
+  "msg": "Simulando um CRITICAL para o Grafana"
+}
