@@ -8,24 +8,38 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - Logging__LogLevel__Default=Trace
             - ASPNETCORE_HTTP_PORTS=8080
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://grafana-loki:3100/otlp/v1/logs
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://grafana-alloy:4318/v1/logs
         ports:
             - "8080:8080"
         networks:
             - app-network
         depends_on:
-            - grafana-loki  
+            - grafana-alloy  
     grafana-loki:
         container_name: grafana-loki
         image: grafana/loki:3.5.10
         ports:
           - "3100:3100" # HTTP (Grafana)
-          - "4318:4318"
         volumes:
           - ./loki-config.yml:/etc/loki/local-config.yaml
         command: -config.file=/etc/loki/local-config.yaml
         networks:
             - app-network
+
+    grafana-alloy:
+        container_name: grafana-alloy
+        image: grafana/alloy:latest
+        ports:
+          - 12345:12345 # HTTP (Alloy)
+          - "4318:4318"
+        volumes:
+          - ./alloy/minimalapi.alloy:/etc/alloy/config.alloy
+        command:  run --server.http.listen-addr=0.0.0.0:12345
+            --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+        networks:
+            - app-network
+        depends_on:
+            - grafana-loki  
           
     grafana-dashboard:
         image: grafana/grafana
@@ -36,7 +50,9 @@ services:
         ports:
           - "3000:3000"
         environment:
-          - GF_SECURITY_ADMIN_PASSWORD=admin
+          GF_AUTH_ANONYMOUS_ENABLED: "true"
+          GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+          GF_AUTH_DISABLE_LOGIN_FORM: "true"
         networks:
             - app-network
 networks:
