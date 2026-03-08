@@ -22,9 +22,6 @@ builder.Services.AddOpenTelemetry()
     })
     .UseGrafana();
 
-builder.Logging.AddOpenTelemetry(logging => logging.UseGrafana());
-
-
 var app = builder.Build();
 
 
