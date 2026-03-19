@@ -21,6 +21,8 @@ git clone https://github.com/r-leafar/LokiGrafana.git
 
 cd LokiGrafana
 
+git checkout alloy
+
 docker compose up -d
 ```
 ---
