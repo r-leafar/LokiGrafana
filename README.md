@@ -28,5 +28,4 @@ docker compose up -d
 
 Assista ao vídeo completo no YouTube:
 
-
-[![Assista no YouTube](https://img.youtube.com/vi/_C_RpmSMTZk/maxresdefault.jpg)](https://youtu.be/_C_RpmSMTZk)
+[![Assista no YouTube](https://img.youtube.com/vi/kWwDhNXGNGY/maxresdefault.jpg)](https://youtu.be/kWwDhNXGNGY)
